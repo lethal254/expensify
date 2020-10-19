@@ -1,25 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import AppRouter from "./routers/AppRouter";
+import { Provider } from "react-redux";
+import configureStore from "./store/configureStore";
+import { addExpense } from "./actions/expenses";
+import { setTextFilter } from "./actions/filters";
+import getVisibleExpenses from "./selectors/expenses";
+
+const store = configureStore();
+store.dispatch(addExpense({ description: "WaterBill", amount: 1000 }));
+store.dispatch(addExpense({ description: "GasBill", amount: 1000, createdAt:1000 }));
+store.dispatch(addExpense({ description: "Rent", amount: 109500 }));
+
+const state = store.getState();
+console.log(getVisibleExpenses(state.expenses, state.filters));
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <AppRouter />
+    </Provider>
   );
 }
 
